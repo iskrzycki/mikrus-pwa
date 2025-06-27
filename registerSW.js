@@ -1,1 +1,1 @@
-if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/mikrus/sw.js', { scope: '/mikrus/' })})}
+if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/mikrus-pwa/sw.js', { scope: '/mikrus-pwa/' })})}
