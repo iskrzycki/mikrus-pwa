@@ -1,0 +1,1 @@
+{"name":"mikr.us PWA","short_name":"mikr.us","description":"App that allosw you to manage mikr.us servers","start_url":"/mikrus-pwa/","display":"standalone","background_color":"#ffffff","theme_color":"#ffffff","lang":"en","scope":"/mikrus-pwa/","icons":[{"src":"pwa-192x192.png","sizes":"192x192","type":"image/png"},{"src":"pwa-512x512.png","sizes":"512x512","type":"image/png"}]}
