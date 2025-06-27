@@ -67,3 +67,8 @@ export default tseslint.config([
   },
 ])
 ```
+
+
+## TODO
+
+[ ] bump vite to 7 (for now, `vite-plugin-pwa` blocks this upgrade)
