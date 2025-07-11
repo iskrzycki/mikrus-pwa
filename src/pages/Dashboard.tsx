@@ -1,82 +1,79 @@
 import { useState } from "react";
+import type { FC } from "react";
+import { useDashboardStore } from "../store/dashboardStore";
 import {
   Box,
-  Card,
-  CardContent,
   Typography,
-  Grid,
-  Container,
   LinearProgress,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Divider,
+  CircularProgress,
+  Button,
+  Paper,
 } from "@mui/material";
+
 import {
   Storage,
   Memory,
-  Computer,
-  Schedule,
   DnsOutlined,
+  Refresh as RefreshIcon,
 } from "@mui/icons-material";
+import { getServerInfo } from "../utils";
 
-interface ServerStats {
-  serverId: string;
-  hddUsage: number;
-  hddTotal: number;
-  ramUsage: number;
-  ramTotal: number;
-  cpuUsage: number;
-  uptime: string;
-}
 
-function Dashboard(): JSX.Element {
-  const [apiResponse, setApiResponse] = useState<string>("");
+const Dashboard: FC = () => {
+  const apiResponse = useDashboardStore((state) => state.apiResponse);
+  const setApiResponse = useDashboardStore((state) => state.setApiResponse);
+  const lastFetch = useDashboardStore((state) => state.lastFetch);
+  const setLastFetch = useDashboardStore((state) => state.setLastFetch);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  // Mock data - replace with actual API calls
-  const serverStats: ServerStats = {
-    serverId: "VPS-12345",
-    hddUsage: 45.2,
-    hddTotal: 100,
-    ramUsage: 2.1,
-    ramTotal: 4,
-    cpuUsage: 23,
-    uptime: "15 days, 3 hours",
-  };
+  const hdd = apiResponse?.disk && apiResponse.disk[0];
+  const hddPercent = hdd ? (hdd.used / hdd.size) * 100 : 0;
+  const ramPercent = apiResponse?.memory ? (apiResponse.memory.used / apiResponse.memory.total) * 100 : 0;
 
-  const hddPercent = (serverStats.hddUsage / serverStats.hddTotal) * 100;
-  const ramPercent = (serverStats.ramUsage / serverStats.ramTotal) * 100;
 
   const handleRefresh = async () => {
+    setLoading(true);
+    setError(null);
+    setApiResponse(undefined);
+    setLastFetch(null);
     const apiKey = localStorage.getItem("apiKey");
     const serverId = localStorage.getItem("serverId");
 
     if (!apiKey || !serverId) {
-      setApiResponse("API key or Server ID not set.");
+      setError("API key or Server ID not set.");
+      setLoading(false);
       return;
     }
 
-    const formData = new FormData();
-    formData.append("key", apiKey);
-    formData.append("srv", serverId);
-
-    console.log("fetching https://api.mikr.us/info");
-    console.log("formData", formData);
-
-    const apiUrl = import.meta.env.DEV
-      ? "/api/info"
-      : "https://api.mikr.us/info";
-
     try {
-      const response = await fetch(apiUrl, {
-        method: "POST",
-        body: formData,
-      });
-      const data = await response.json();
-      setApiResponse(JSON.stringify(data, null, 2));
+      const response = await getServerInfo(apiKey, serverId);
+      setApiResponse(response);
+      setLastFetch(new Date());
     } catch (err) {
-      setApiResponse("Error: " + (err as Error).message);
+      setError("Error: " + (err as Error).message);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <Container maxWidth="lg">
+
+    <Paper elevation={3} sx={{
+      width: '90vw',
+      height: 'calc(100vh - 120px)',
+      mt: 3,
+      p: 2,
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'start',
+      alignItems: 'center',
+    }}>
       <Typography
         variant="h4"
         component="h1"
@@ -88,123 +85,120 @@ function Dashboard(): JSX.Element {
 
       {/* Refresh Button */}
       <Box mb={3}>
-        <button onClick={handleRefresh}>Refresh</button>
+        <Button
+          onClick={handleRefresh}
+          disabled={loading}
+          color="primary"
+          variant="outlined"
+          startIcon={<RefreshIcon />}
+          size="large"
+          aria-label="refresh"
+          sx={{ borderRadius: 2, minWidth: 48, minHeight: 48, px: 2 }}
+        >
+          Odśwież
+        </Button>
+        {loading && (
+          <Box display="inline" ml={2}>
+            <CircularProgress size={24} />
+          </Box>
+        )}
       </Box>
-      {/* API Response */}
-      {apiResponse && (
-        <Box mb={3}>
-          <Typography
-            variant="body2"
-            component="pre"
-            sx={{
-              background: "#222",         // Dark background
-              color: "#fff",              // White text
-              p: 2,
-              borderRadius: 1,
-              fontFamily: "monospace",    // Monospace for code
-              fontSize: "1rem",
-              overflowX: "auto"
-            }}
-          >
-            {apiResponse}
-          </Typography>
-        </Box>
+
+      {/* Last fetch date */}
+      {lastFetch && (
+        <Typography variant="body2" color="text.secondary" mb={2}>
+          Ostatnie pobranie danych: {lastFetch.toLocaleString()}
+        </Typography>
       )}
 
-      <Grid container spacing={3}>
-        <Grid item xs={12} sm={6} md={4}>
-          <Card elevation={3}>
-            <CardContent>
-              <Box display="flex" alignItems="center" mb={2}>
-                <DnsOutlined color="primary" sx={{ mr: 1 }} />
-                <Typography variant="h6">Server ID</Typography>
-              </Box>
-              <Typography variant="h4" color="primary">
-                {serverStats.serverId}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
+      {error && (
+        <Typography color="error" mb={2}>
+          {error}
+        </Typography>
+      )}
 
-        <Grid item xs={12} sm={6} md={4}>
-          <Card elevation={3}>
-            <CardContent>
-              <Box display="flex" alignItems="center" mb={2}>
-                <Storage color="primary" sx={{ mr: 1 }} />
-                <Typography variant="h6">HDD Space</Typography>
-              </Box>
-              <Typography variant="h4" color="primary">
-                {hddPercent.toFixed(1)}%
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {serverStats.hddUsage} GB / {serverStats.hddTotal} GB
-              </Typography>
-              <LinearProgress
-                variant="determinate"
-                value={hddPercent}
-                sx={{ mt: 1 }}
-              />
-            </CardContent>
-          </Card>
-        </Grid>
+      {apiResponse && !loading && !error && (
+        <List
+          sx={{
+            bgcolor: '#e3f2fd',
+            borderRadius: 3,
+            boxShadow: 4,
+            border: '1.5px solid #90caf9',
+            p: 0,
+            mt: 2,
+          }}
+        >
+          <ListItem sx={{ py: 1, px: 2, minHeight: 0 }}>
+            <ListItemIcon sx={{ minWidth: 36 }}>
+              <DnsOutlined color="primary" />
+            </ListItemIcon>
+            <ListItemText
+              primary={apiResponse.server_id}
+              secondary={
+                <Typography variant="body2" color="primary">
+                  Uptime: {apiResponse.uptime}
+                </Typography>
+              }
+            />
+            {/* <ListItemText
+              primary="Uptime"
+              secondary={
+                <Typography variant="h6" color="primary">
+                  {apiResponse.uptime}
+                </Typography>
+              }
+            /> */}
+          </ListItem>
+          <Divider component="li" />
 
-        <Grid item xs={12} sm={6} md={4}>
-          <Card elevation={3}>
-            <CardContent>
-              <Box display="flex" alignItems="center" mb={2}>
-                <Memory color="primary" sx={{ mr: 1 }} />
-                <Typography variant="h6">RAM Usage</Typography>
-              </Box>
-              <Typography variant="h4" color="primary">
-                {ramPercent.toFixed(1)}%
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {serverStats.ramUsage} GB / {serverStats.ramTotal} GB
-              </Typography>
-              <LinearProgress
-                variant="determinate"
-                value={ramPercent}
-                sx={{ mt: 1 }}
-              />
-            </CardContent>
-          </Card>
-        </Grid>
+          <ListItem sx={{ py: 1, px: 2, minHeight: 0 }}>
+            <ListItemIcon sx={{ minWidth: 36 }}>
+              <Storage color="primary" />
+            </ListItemIcon>
+            <ListItemText
+              primary="HDD Space"
+              secondary={
+                <>
+                  <Typography variant="body2" color="primary">
+                    {hddPercent.toFixed(1)}% ({hdd?.used} GB / {hdd?.size} GB)
+                  </Typography>
+                  <LinearProgress
+                    variant="determinate"
+                    value={hddPercent}
+                    sx={{ mt: 1, height: 8, borderRadius: 1, bgcolor: "#e3f2fd" }}
+                  />
+                </>
+              }
+            />
+          </ListItem>
+          <Divider component="li" />
 
-        <Grid item xs={12} sm={6} md={4}>
-          <Card elevation={3}>
-            <CardContent>
-              <Box display="flex" alignItems="center" mb={2}>
-                <Computer color="primary" sx={{ mr: 1 }} />
-                <Typography variant="h6">CPU Usage</Typography>
-              </Box>
-              <Typography variant="h4" color="primary">
-                {serverStats.cpuUsage}%
-              </Typography>
-              <LinearProgress
-                variant="determinate"
-                value={serverStats.cpuUsage}
-                sx={{ mt: 1 }}
-              />
-            </CardContent>
-          </Card>
-        </Grid>
+          <ListItem sx={{ py: 1, px: 2, minHeight: 0, width: '100%' }}>
+            <ListItemIcon sx={{ minWidth: 36 }}>
+              <Memory color="primary" />
+            </ListItemIcon>
+            <ListItemText
+              primary="RAM Usage"
+              secondary={
+                <>
+                  <Typography variant="body2" color="primary">
+                    {ramPercent.toFixed(1)}% ({apiResponse.memory?.used} MB / {apiResponse.memory?.total} MB)
+                  </Typography>
+                  <LinearProgress
+                    variant="determinate"
+                    value={ramPercent}
+                    sx={{ mt: 1, height: 8, borderRadius: 1, bgcolor: "#e3f2fd" }}
+                  />
+                </>
+              }
+            />
+          </ListItem>
+        </List>
+      )}
+    </Paper>
 
-        <Grid item xs={12} sm={6} md={4}>
-          <Card elevation={3}>
-            <CardContent>
-              <Box display="flex" alignItems="center" mb={2}>
-                <Schedule color="primary" sx={{ mr: 1 }} />
-                <Typography variant="h6">Uptime</Typography>
-              </Box>
-              <Typography variant="h5" color="primary">
-                {serverStats.uptime}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
-    </Container>
+
   );
-}
+};
 
 export default Dashboard;
