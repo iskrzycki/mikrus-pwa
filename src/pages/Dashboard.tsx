@@ -1,8 +1,8 @@
 import { useState } from "react";
 import type { FC } from "react";
+import { PieChart } from '@mui/x-charts/PieChart';
 import { useDashboardStore } from "../store/dashboardStore";
 import {
-  Box,
   Typography,
   LinearProgress,
   List,
@@ -10,7 +10,6 @@ import {
   ListItemIcon,
   ListItemText,
   Divider,
-  CircularProgress,
   Button,
   Paper,
 } from "@mui/material";
@@ -22,7 +21,6 @@ import {
   Refresh as RefreshIcon,
 } from "@mui/icons-material";
 import { getServerInfo } from "../utils";
-
 
 const Dashboard: FC = () => {
   const apiResponse = useDashboardStore((state) => state.apiResponse);
@@ -36,6 +34,24 @@ const Dashboard: FC = () => {
   const hddPercent = hdd ? (hdd.used / hdd.size) * 100 : 0;
   const ramPercent = apiResponse?.memory ? (apiResponse.memory.used / apiResponse.memory.total) * 100 : 0;
 
+  const HDDdata = [
+    { label: 'Available', value: hdd?.available || 0, color: '#0088FE' },
+    { label: 'Used', value: hdd?.used || 0, color: '#00C49F' },
+    { label: 'Reserved', value: hdd?.reserved || 0, color: '#FFBB28' },
+  ];
+
+  const memoryData = [
+    { label: 'Used', value: apiResponse?.memory?.used || 0, color: '#00C49F' },
+    { label: 'Free', value: apiResponse?.memory?.free || 0, color: '#0088FE' },
+    { label: "Buff/Cache", value: apiResponse?.memory?.buffCache || 0, color: '#FFBB28' },
+  ];
+
+  const settings = {
+    width: 200,
+    height: 200,
+  };
+
+  console.log("Dashboard rendered with data:", apiResponse?.memory);
 
   const handleRefresh = async () => {
     setLoading(true);
@@ -63,10 +79,9 @@ const Dashboard: FC = () => {
   };
 
   return (
-
     <Paper elevation={3} sx={{
       width: '90vw',
-      height: 'calc(100vh - 120px)',
+      height: 'calc(100% - 120px)',
       mt: 3,
       p: 2,
       display: 'flex',
@@ -82,122 +97,122 @@ const Dashboard: FC = () => {
       >
         Server Dashboard
       </Typography>
-
-      {/* Refresh Button */}
-      <Box mb={3}>
-        <Button
-          onClick={handleRefresh}
-          disabled={loading}
-          color="primary"
-          variant="outlined"
-          startIcon={<RefreshIcon />}
-          size="large"
-          aria-label="refresh"
-          sx={{ borderRadius: 2, minWidth: 48, minHeight: 48, px: 2 }}
-        >
-          Odśwież
-        </Button>
-        {loading && (
-          <Box display="inline" ml={2}>
-            <CircularProgress size={24} />
-          </Box>
-        )}
-      </Box>
-
-      {/* Last fetch date */}
+      <Button
+        onClick={handleRefresh}
+        disabled={loading}
+        color="primary"
+        variant="outlined"
+        loading={loading}
+        startIcon={<RefreshIcon />}
+        size="large"
+        aria-label="refresh"
+        sx={{ borderRadius: 2, minWidth: 48, minHeight: 48, px: 2, mb: 3 }}
+      >
+        Odśwież
+      </Button>
       {lastFetch && (
         <Typography variant="body2" color="text.secondary" mb={2}>
           Ostatnie pobranie danych: {lastFetch.toLocaleString()}
         </Typography>
       )}
-
       {error && (
         <Typography color="error" mb={2}>
           {error}
         </Typography>
       )}
-
       {apiResponse && !loading && !error && (
-        <List
-          sx={{
-            bgcolor: '#e3f2fd',
-            borderRadius: 3,
-            boxShadow: 4,
-            border: '1.5px solid #90caf9',
-            p: 0,
-            mt: 2,
-          }}
-        >
-          <ListItem sx={{ py: 1, px: 2, minHeight: 0 }}>
-            <ListItemIcon sx={{ minWidth: 36 }}>
-              <DnsOutlined color="primary" />
-            </ListItemIcon>
-            <ListItemText
-              primary={apiResponse.server_id}
-              secondary={
-                <Typography variant="body2" color="primary">
-                  Uptime: {apiResponse.uptime}
-                </Typography>
-              }
-            />
-            {/* <ListItemText
-              primary="Uptime"
-              secondary={
-                <Typography variant="h6" color="primary">
-                  {apiResponse.uptime}
-                </Typography>
-              }
-            /> */}
-          </ListItem>
-          <Divider component="li" />
-
-          <ListItem sx={{ py: 1, px: 2, minHeight: 0 }}>
-            <ListItemIcon sx={{ minWidth: 36 }}>
-              <Storage color="primary" />
-            </ListItemIcon>
-            <ListItemText
-              primary="HDD Space"
-              secondary={
-                <>
+        <>
+          <List
+            sx={{
+              bgcolor: '#e3f2fd',
+              borderRadius: 3,
+              boxShadow: 4,
+              border: '1.5px solid #90caf9',
+              p: 0,
+              mt: 2,
+            }}
+          >
+            <ListItem sx={{ py: 1, px: 2, minHeight: 0 }}>
+              <ListItemIcon sx={{ minWidth: 36 }}>
+                <DnsOutlined color="primary" />
+              </ListItemIcon>
+              <ListItemText
+                primary={apiResponse.server_id}
+                secondary={
                   <Typography variant="body2" color="primary">
-                    {hddPercent.toFixed(1)}% ({hdd?.used} GB / {hdd?.size} GB)
+                    Uptime: {apiResponse.uptime}
                   </Typography>
-                  <LinearProgress
-                    variant="determinate"
-                    value={hddPercent}
-                    sx={{ mt: 1, height: 8, borderRadius: 1, bgcolor: "#e3f2fd" }}
-                  />
-                </>
-              }
-            />
-          </ListItem>
-          <Divider component="li" />
-
-          <ListItem sx={{ py: 1, px: 2, minHeight: 0, width: '100%' }}>
-            <ListItemIcon sx={{ minWidth: 36 }}>
-              <Memory color="primary" />
-            </ListItemIcon>
-            <ListItemText
-              primary="RAM Usage"
-              secondary={
-                <>
-                  <Typography variant="body2" color="primary">
-                    {ramPercent.toFixed(1)}% ({apiResponse.memory?.used} MB / {apiResponse.memory?.total} MB)
-                  </Typography>
-                  <LinearProgress
-                    variant="determinate"
-                    value={ramPercent}
-                    sx={{ mt: 1, height: 8, borderRadius: 1, bgcolor: "#e3f2fd" }}
-                  />
-                </>
-              }
-            />
-          </ListItem>
-        </List>
+                }
+              />
+            </ListItem>
+            <Divider component="li" />
+            <ListItem sx={{ py: 1, px: 2, minHeight: 0 }}>
+              <ListItemIcon sx={{ minWidth: 36 }}>
+                <Storage color="primary" />
+              </ListItemIcon>
+              <ListItemText
+                primary="HDD Space"
+                secondary={
+                  <>
+                    <Typography variant="body2" color="primary">
+                      {hddPercent.toFixed(1)}% ({hdd?.used} GB / {hdd?.size} GB)
+                    </Typography>
+                    <LinearProgress
+                      variant="determinate"
+                      value={hddPercent}
+                      sx={{ mt: 1, height: 8, borderRadius: 1, bgcolor: "#e3f2fd" }}
+                    />
+                  </>
+                }
+              />
+            </ListItem>
+            <Divider component="li" />
+            <ListItem sx={{ py: 1, px: 2, minHeight: 0, width: '100%' }}>
+              <ListItemIcon sx={{ minWidth: 36 }}>
+                <Memory color="primary" />
+              </ListItemIcon>
+              <ListItemText
+                primary="RAM Usage"
+                secondary={
+                  <>
+                    <Typography variant="body2" color="primary">
+                      {ramPercent.toFixed(1)}% ({apiResponse.memory?.used} MB / {apiResponse.memory?.total} MB)
+                    </Typography>
+                    <LinearProgress
+                      variant="determinate"
+                      value={ramPercent}
+                      sx={{ mt: 1, height: 8, borderRadius: 1, bgcolor: "#e3f2fd" }}
+                    />
+                  </>
+                }
+              />
+            </ListItem>
+          </List>
+          <Typography
+            variant="h6"
+            component="h2"
+            sx={{ mt: 4, mb: 2, color: 'text.secondary', fontWeight: 400 }}
+          >
+            HDD Usage Distribution
+          </Typography>
+          <PieChart
+            series={[{ innerRadius: 50, outerRadius: 100, data: HDDdata, arcLabel: 'value' }]}
+            {...settings}
+          />
+          <Typography
+            variant="h6"
+            component="h2"
+            sx={{ mt: 3, mb: 2, color: 'text.secondary', fontWeight: 400 }}
+          >
+            Memory Usage Distribution
+          </Typography>
+          <PieChart
+            series={[{ innerRadius: 50, outerRadius: 100, data: memoryData, arcLabel: 'value' }]}
+            {...settings}
+          />
+        </>
       )}
     </Paper>
-
-
   );
 };
 
