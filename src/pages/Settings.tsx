@@ -8,6 +8,7 @@ import {
   Paper,
 } from "@mui/material";
 import { Save } from "@mui/icons-material";
+import packageJson from "../../package.json";
 
 const Settings: FC = () => {
   const [apiKey, setApiKey] = useState<string>("");
@@ -46,7 +47,6 @@ const Settings: FC = () => {
       <Typography variant="h4" component="h1" gutterBottom>
         Settings
       </Typography>
-
       <Box component="form" onSubmit={handleSave} sx={{ mt: 2 }}>
         <TextField
           fullWidth
@@ -59,7 +59,6 @@ const Settings: FC = () => {
           type="password"
           autoComplete="off"
         />
-
         <TextField
           fullWidth
           label="Server ID"
@@ -69,19 +68,23 @@ const Settings: FC = () => {
           margin="normal"
           variant="outlined"
         />
-
         <Button
           type="submit"
           variant="contained"
           startIcon={<Save />}
           sx={{ mt: 2, mb: 1 }}
-          // fullWidth
         >
           Save Settings
         </Button>
       </Box>
+      <Typography
+        variant="body2"
+        color="text.secondary"
+        sx={{ mb: 3 }}
+      >
+        App Version: {packageJson.version}
+      </Typography>
     </Paper>
-
   );
 }
 
