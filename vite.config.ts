@@ -8,7 +8,7 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      includeAssets: ["src/assets/react.svg"],
+      includeAssets: ["src/assets/icon-72.png", "src/assets/icon-120.png", "src/assets/icon-128.png", "src/assets/icon-144.png", "src/assets/icon-180.png", "src/assets/icon-192.png", "src/assets/icon-512.png", "src/assets/icon-1024.png"],
       manifest: {
         name: "mikr.us PWA",
         short_name: "mikr.us",
@@ -16,16 +16,56 @@ export default defineConfig({
         theme_color: "#402B43",
         icons: [
           {
-            src: "src/assets/react.svg",
-            sizes: "192x192",
-            type: "image/svg",
+            "src": "src/assets/icon-72.png",
+            "sizes": "72x72",
+            "type": "image/png"
           },
-             {
-            src: "src/assets/react.svg",
-            sizes: "512x512",
-            type: "image/svg",
+          {
+            "src": "src/assets/icon-120.png",
+            "sizes": "120x120",
+            "type": "image/png"
           },
-        ],
+          {
+            "src": "src/assets/icon-128.png",
+            "sizes": "128x128",
+            "type": "image/png"
+          },
+          {
+            "src": "src/assets/icon-144.png",
+            "sizes": "144x144",
+            "type": "image/png"
+          },
+           {
+            "src": "src/assets/icon-152.png",
+            "sizes": "152x152",
+            "type": "image/png"
+          },
+           {
+            "src": "src/assets/icon-167.png",
+            "sizes": "167x167",
+            "type": "image/png"
+          },
+          {
+            "src": "src/assets/icon-180.png",
+            "sizes": "180x180",
+            "type": "image/png"
+          },
+          {
+            "src": "src/assets/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+          },
+          {
+            "src": "src/assets/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+          },
+          {
+            "src": "src/assets/icon-1024.png",
+            "sizes": "1024x1024",
+            "type": "image/png"
+          },
+        ]
       },
     }),
   ],
