@@ -1,12 +1,6 @@
 import { useState, useEffect } from "react";
 import type { FC, FormEvent } from "react";
-import {
-  Box,
-  TextField,
-  Button,
-  Typography,
-  Paper,
-} from "@mui/material";
+import { Box, TextField, Button, Typography, Paper } from "@mui/material";
 import { Save } from "@mui/icons-material";
 import packageJson from "../../package.json";
 
@@ -34,16 +28,19 @@ const Settings: FC = () => {
   };
 
   return (
-    <Paper elevation={3} sx={{
-      width: '90vw',
-      height: 'calc(100vh - 120px)',
-      mt: 3,
-      p: 2,
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'start',
-      alignItems: 'center',
-    }}>
+    <Paper
+      elevation={3}
+      sx={{
+        width: "90vw",
+        height: "calc(100vh - 120px)",
+        mt: 3,
+        p: 2,
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "start",
+        alignItems: "center",
+      }}
+    >
       <Typography variant="h4" component="h1" gutterBottom>
         Settings
       </Typography>
@@ -77,15 +74,11 @@ const Settings: FC = () => {
           Save Settings
         </Button>
       </Box>
-      <Typography
-        variant="body2"
-        color="text.secondary"
-        sx={{ mb: 3 }}
-      >
+      <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
         App Version: {packageJson.version}
       </Typography>
     </Paper>
   );
-}
+};
 
 export default Settings;

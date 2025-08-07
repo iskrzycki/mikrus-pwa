@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { FC } from "react";
-import { PieChart } from '@mui/x-charts/PieChart';
+import { PieChart } from "@mui/x-charts/PieChart";
 import { useDashboardStore } from "../store/dashboardStore";
 import {
   Typography,
@@ -32,18 +32,24 @@ const Dashboard: FC = () => {
 
   const hdd = apiResponse?.disk && apiResponse.disk[0];
   const hddPercent = hdd ? (hdd.used / hdd.size) * 100 : 0;
-  const ramPercent = apiResponse?.memory ? (apiResponse.memory.used / apiResponse.memory.total) * 100 : 0;
+  const ramPercent = apiResponse?.memory
+    ? (apiResponse.memory.used / apiResponse.memory.total) * 100
+    : 0;
 
   const HDDdata = [
-    { label: 'Available', value: hdd?.available || 0, color: '#0088FE' },
-    { label: 'Used', value: hdd?.used || 0, color: '#00C49F' },
-    { label: 'Reserved', value: hdd?.reserved || 0, color: '#FFBB28' },
+    { label: "Available", value: hdd?.available || 0, color: "#0088FE" },
+    { label: "Used", value: hdd?.used || 0, color: "#00C49F" },
+    { label: "Reserved", value: hdd?.reserved || 0, color: "#FFBB28" },
   ];
 
   const memoryData = [
-    { label: 'Used', value: apiResponse?.memory?.used || 0, color: '#00C49F' },
-    { label: 'Free', value: apiResponse?.memory?.free || 0, color: '#0088FE' },
-    { label: "Buff/Cache", value: apiResponse?.memory?.buffCache || 0, color: '#FFBB28' },
+    { label: "Used", value: apiResponse?.memory?.used || 0, color: "#00C49F" },
+    { label: "Free", value: apiResponse?.memory?.free || 0, color: "#0088FE" },
+    {
+      label: "Buff/Cache",
+      value: apiResponse?.memory?.buffCache || 0,
+      color: "#FFBB28",
+    },
   ];
 
   const settings = {
@@ -79,16 +85,19 @@ const Dashboard: FC = () => {
   };
 
   return (
-    <Paper elevation={3} sx={{
-      width: '90vw',
-      height: 'calc(100% - 120px)',
-      mt: 3,
-      p: 2,
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'start',
-      alignItems: 'center',
-    }}>
+    <Paper
+      elevation={3}
+      sx={{
+        width: "90vw",
+        height: "calc(100% - 120px)",
+        mt: 3,
+        p: 2,
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "start",
+        alignItems: "center",
+      }}
+    >
       <Typography
         variant="h4"
         component="h1"
@@ -124,10 +133,10 @@ const Dashboard: FC = () => {
         <>
           <List
             sx={{
-              bgcolor: '#e3f2fd',
+              bgcolor: "#e3f2fd",
               borderRadius: 3,
               boxShadow: 4,
-              border: '1.5px solid #90caf9',
+              border: "1.5px solid #90caf9",
               p: 0,
               mt: 2,
             }}
@@ -160,14 +169,19 @@ const Dashboard: FC = () => {
                     <LinearProgress
                       variant="determinate"
                       value={hddPercent}
-                      sx={{ mt: 1, height: 8, borderRadius: 1, bgcolor: "#e3f2fd" }}
+                      sx={{
+                        mt: 1,
+                        height: 8,
+                        borderRadius: 1,
+                        bgcolor: "#e3f2fd",
+                      }}
                     />
                   </>
                 }
               />
             </ListItem>
             <Divider component="li" />
-            <ListItem sx={{ py: 1, px: 2, minHeight: 0, width: '100%' }}>
+            <ListItem sx={{ py: 1, px: 2, minHeight: 0, width: "100%" }}>
               <ListItemIcon sx={{ minWidth: 36 }}>
                 <Memory color="primary" />
               </ListItemIcon>
@@ -176,12 +190,18 @@ const Dashboard: FC = () => {
                 secondary={
                   <>
                     <Typography variant="body2" color="primary">
-                      {ramPercent.toFixed(1)}% ({apiResponse.memory?.used} MB / {apiResponse.memory?.total} MB)
+                      {ramPercent.toFixed(1)}% ({apiResponse.memory?.used} MB /{" "}
+                      {apiResponse.memory?.total} MB)
                     </Typography>
                     <LinearProgress
                       variant="determinate"
                       value={ramPercent}
-                      sx={{ mt: 1, height: 8, borderRadius: 1, bgcolor: "#e3f2fd" }}
+                      sx={{
+                        mt: 1,
+                        height: 8,
+                        borderRadius: 1,
+                        bgcolor: "#e3f2fd",
+                      }}
                     />
                   </>
                 }
@@ -191,23 +211,37 @@ const Dashboard: FC = () => {
           <Typography
             variant="h6"
             component="h2"
-            sx={{ mt: 4, mb: 2, color: 'text.secondary', fontWeight: 400 }}
+            sx={{ mt: 4, mb: 2, color: "text.secondary", fontWeight: 400 }}
           >
             HDD Usage Distribution
           </Typography>
           <PieChart
-            series={[{ innerRadius: 50, outerRadius: 100, data: HDDdata, arcLabel: 'value' }]}
+            series={[
+              {
+                innerRadius: 50,
+                outerRadius: 100,
+                data: HDDdata,
+                arcLabel: "value",
+              },
+            ]}
             {...settings}
           />
           <Typography
             variant="h6"
             component="h2"
-            sx={{ mt: 3, mb: 2, color: 'text.secondary', fontWeight: 400 }}
+            sx={{ mt: 3, mb: 2, color: "text.secondary", fontWeight: 400 }}
           >
             Memory Usage Distribution
           </Typography>
           <PieChart
-            series={[{ innerRadius: 50, outerRadius: 100, data: memoryData, arcLabel: 'value' }]}
+            series={[
+              {
+                innerRadius: 50,
+                outerRadius: 100,
+                data: memoryData,
+                arcLabel: "value",
+              },
+            ]}
             {...settings}
           />
         </>
