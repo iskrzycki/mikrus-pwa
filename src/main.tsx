@@ -1,8 +1,14 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import './index.css'
+import * as Sentry from "@sentry/react";
 import App from './App.tsx'
-import './i18n' // Import i18n configuration
+import './index.css'
+import './i18n';
+
+Sentry.init({
+  dsn: "https://efde8d31a3ba69778e22a60f7609d971@o4508029727277056.ingest.de.sentry.io/4508029729505360",
+  sendDefaultPii: true
+});
 
 let installPrompt = null;
 const installButton = document.querySelector("#install");

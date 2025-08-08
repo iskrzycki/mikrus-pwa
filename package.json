@@ -17,6 +17,7 @@
     "@mui/icons-material": "^7.1.2",
     "@mui/material": "^7.1.2",
     "@mui/x-charts": "^8.9.0",
+    "@sentry/react": "^10.2.0",
     "i18next": "^25.3.2",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
