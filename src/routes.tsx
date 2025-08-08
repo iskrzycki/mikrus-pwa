@@ -6,6 +6,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import TerminalIcon from "@mui/icons-material/Terminal";
 import StorageIcon from "@mui/icons-material/Storage";
 import ListAltIcon from "@mui/icons-material/ListAlt";
+import Logs from "./pages/Logs";
 
 export type RouteConfig = {
   path: string;
@@ -35,7 +36,7 @@ export const routes: RouteConfig[] = [
   },
   {
     path: "logs",
-    element: <NotImplemented label={"navbar.logs"} />,
+    element: <Logs />,
     labelKey: "navbar.logs",
     icon: <ListAltIcon fontSize="large" />,
     nav: true,

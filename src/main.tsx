@@ -7,7 +7,9 @@ import './i18n';
 
 Sentry.init({
   dsn: "https://efde8d31a3ba69778e22a60f7609d971@o4508029727277056.ingest.de.sentry.io/4508029729505360",
-  sendDefaultPii: true
+  sendDefaultPii: true,
+  integrations: [Sentry.browserTracingIntegration()],
+  tracesSampleRate: 1.0,
 });
 
 let installPrompt = null;

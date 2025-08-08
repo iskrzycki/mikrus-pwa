@@ -8,6 +8,8 @@ export interface DiskStats {
   reserved: number;
 }
 
+import * as Sentry from "@sentry/react";
+
 interface MemoryStats {
   total: number;
   used: number;
@@ -53,7 +55,6 @@ export const fetchMikrusAPI = async (
     ? "/api"
     : "https://api.mikr.us";
 
-
   const response = await fetch(`${apiUrl}/${endpoint}`, {
     method: "POST",
     body: formData,
@@ -62,9 +63,13 @@ export const fetchMikrusAPI = async (
   console.log("response status", response.status);
 
   if (response.status === 429) {
-    throw new Error("Too Many Requests");
+    const error = new Error("Too Many Requests");
+    Sentry.captureException(error);
+    throw error;
   } else if (response.status === 400) {
-    throw new Error("Bad request");
+    const error = new Error("Bad request");
+    Sentry.captureException(error);
+    throw error;
   }
 
   return response.json();
@@ -86,6 +91,19 @@ export const getServerInfo = async (
     disk: parseDfString(stats.df),
   };
 };
+export interface LogData {
+  id: string;
+  output: string;
+  server_id: string;
+  task: string;
+  when_created: string;
+  when_done: string;
+}
+
+export const getLogs = async (
+  apiKey: string,
+  serverId: string
+): Promise<LogData[]> => await fetchMikrusAPI(apiKey, serverId, "logs");
 
 export const extractSystemInfo = (inputString: string): { systemTime: string, uptime: string } => {
   // Regular expression to match the system time in the format HH:MM:SS
@@ -141,7 +159,7 @@ export const parseDfString = (dfOutput: string): DiskStats[] => {
   for (let i = 1; i < lines.length; i++) {
     const match = dfRegex.exec(lines[i]);
     if (match) {
-      const [_, filesystem, size, used, available, usePercent, mountedOn] =
+      const [, filesystem, size, used, available, usePercent, mountedOn] =
         match;
 
       const parsedSize = parseSizeString(size);

@@ -25,7 +25,7 @@
     "dashboard": "Panel",
     "settings": "Ustawienia",
     "databases": "Bazy danych",
-    "cmd": "CMD",
+    "cmd": "CMD & akcje",
     "logs": "Logi"
   },
   "settings": {
