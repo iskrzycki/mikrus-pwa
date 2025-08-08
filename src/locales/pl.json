@@ -1,0 +1,45 @@
+{
+  "dashboard": {
+    "title": "Panel",
+    "lastUpdate": "Ostatnia aktualizacja {{value}}",
+    "refresh": "Odśwież",
+    "info": {
+      "uptime": "Czas pracy: {{value}}",
+      "hdd": "Wykorzystanie dysku",
+      "ram": "Wykorzystanie RAM"
+    },
+    "hdd": {
+      "chartTitle": "Wykorzystanie HDD",
+      "available": "Dostępne",
+      "used": "Użyte",
+      "reserved": "Zarezerwowane"
+    },
+    "memory": {
+      "chartTitle": "Wykorzystanie pamięci",
+      "used": "Użyte",
+      "free": "Dostępne",
+      "buffCache": "Buff/Cache"
+    }
+  },
+  "navbar": {
+    "dashboard": "Panel",
+    "settings": "Ustawienia",
+    "databases": "Bazy danych",
+    "cmd": "CMD",
+    "logs": "Logi"
+  },
+  "settings": {
+    "title": "Ustawienia",
+    "save": "Zapisz zmiany",
+    "apiLabel": "Klucz API",
+    "serverIdLabel": "ID serwera",
+    "apiPlaceholder": "Wprowadź swój klucz API",
+    "serverIdPlaceholder": "Wprowadź swoje ID serwera",
+    "version": "Wersja aplikacji: {{value}}",
+    "language": "Język",
+    "languages": {
+      "en": "Angielski",
+      "pl": "Polski"
+    }
+  }
+}

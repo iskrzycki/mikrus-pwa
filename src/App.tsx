@@ -1,8 +1,4 @@
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 
@@ -49,15 +45,13 @@ const App = () => (
   <ThemeProvider theme={dashboardTheme}>
     <Router basename="/mikrus-pwa/">
       <div className="app-container">
-        {/* <div className="main-content-wide"> */}
-          <div className="main-content">
-            <Routes>
-              {routes.map(({ path, element }) => (
-                <Route key={path} path={path} element={element} />
-              ))}
-            </Routes>
-          </div>
-        {/* </div> */}
+        <div className="main-content">
+          <Routes>
+            {routes.map(({ path, element }) => (
+              <Route key={path} path={path} element={element} />
+            ))}
+          </Routes>
+        </div>
         <Navbar routes={routes} />
       </div>
     </Router>

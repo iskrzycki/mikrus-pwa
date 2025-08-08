@@ -10,7 +10,7 @@ import ListAltIcon from "@mui/icons-material/ListAlt";
 export type RouteConfig = {
   path: string;
   element: React.ReactNode;
-  label: string;
+  labelKey: string;
   icon: React.ReactNode;
   nav: boolean;
   to: string;
@@ -20,7 +20,7 @@ export const routes: RouteConfig[] = [
   {
     path: "/",
     element: <Dashboard />,
-    label: "Dashboard",
+    labelKey: "navbar.dashboard",
     icon: <DashboardIcon fontSize="large" />,
     nav: true,
     to: "dashboard",
@@ -28,31 +28,31 @@ export const routes: RouteConfig[] = [
   {
     path: "dashboard",
     element: <Dashboard />,
-    label: "Dashboard",
+    labelKey: "navbar.dashboard",
     icon: <DashboardIcon fontSize="large" />,
     nav: false, // hide duplicate in nav
     to: "dashboard",
   },
   {
     path: "logs",
-    element: <NotImplemented label="Logs" />,
-    label: "Logs",
+    element: <NotImplemented label={"navbar.logs"} />,
+    labelKey: "navbar.logs",
     icon: <ListAltIcon fontSize="large" />,
     nav: true,
     to: "logs",
   },
   {
     path: "databases",
-    element: <NotImplemented label="Databases" />,
-    label: "Databases",
+    element: <NotImplemented label={"navbar.databases"} />,
+    labelKey: "navbar.databases",
     icon: <StorageIcon fontSize="large" />,
     nav: true,
     to: "databases",
   },
   {
     path: "cmd",
-    element: <NotImplemented label="CMD" />,
-    label: "CMD",
+    element: <NotImplemented label={"navbar.cmd"} />,
+    labelKey: "navbar.cmd",
     icon: <TerminalIcon fontSize="large" />,
     nav: true,
     to: "cmd",
@@ -60,7 +60,7 @@ export const routes: RouteConfig[] = [
   {
     path: "settings",
     element: <Settings />,
-    label: "Settings",
+    labelKey: "navbar.settings",
     icon: <SettingsIcon fontSize="large" />,
     nav: true,
     to: "settings",

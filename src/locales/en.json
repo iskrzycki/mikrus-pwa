@@ -1,0 +1,45 @@
+{
+  "dashboard": {
+    "title": "Dashboard",
+    "lastUpdate": "Last update {{value}}",
+    "refresh": "Refresh",
+    "info": {
+      "uptime": "Uptime: {{value}}",
+      "hdd": "HDD Space",
+      "ram": "RAM Usage"
+    },
+    "hdd": {
+      "chartTitle": "HDD Usage Distribution",
+      "available": "Available",
+      "used": "Used",
+      "reserved": "Reserved"
+    },
+    "memory": {
+      "chartTitle": "Memory Usage Distribution",
+      "used": "Used",
+      "free": "Free",
+      "buffCache": "Buff/Cache"
+    }
+  },
+  "navbar": {
+    "dashboard": "Dashboard",
+    "settings": "Settings",
+    "databases": "Databases",
+    "cmd": "CMD",
+    "logs": "Logs"
+  },
+  "settings": {
+    "title": "Settings",
+    "save": "Save changes",
+    "apiLabel": "API Key",
+    "serverIdLabel": "Server ID",
+    "apiPlaceholder": "Enter your API key",
+    "serverIdPlaceholder": "Enter your server ID",
+    "version": "App version: {{value}}",
+    "language": "Language",
+    "languages": {
+      "en": "English",
+      "pl": "Polish"
+    }
+  }
+}

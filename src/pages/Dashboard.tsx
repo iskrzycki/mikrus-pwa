@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { FC } from "react";
 import { PieChart } from "@mui/x-charts/PieChart";
 import { useDashboardStore } from "../store/dashboardStore";
+import { useTranslation } from "react-i18next";
 import {
   Typography,
   LinearProgress,
@@ -23,6 +24,7 @@ import {
 import { getServerInfo } from "../utils";
 
 const Dashboard: FC = () => {
+  const { t } = useTranslation();
   const apiResponse = useDashboardStore((state) => state.apiResponse);
   const setApiResponse = useDashboardStore((state) => state.setApiResponse);
   const lastFetch = useDashboardStore((state) => state.lastFetch);
@@ -37,16 +39,16 @@ const Dashboard: FC = () => {
     : 0;
 
   const HDDdata = [
-    { label: "Available", value: hdd?.available || 0, color: "#0088FE" },
-    { label: "Used", value: hdd?.used || 0, color: "#00C49F" },
-    { label: "Reserved", value: hdd?.reserved || 0, color: "#FFBB28" },
+    { label: t("dashboard.hdd.available"), value: hdd?.available || 0, color: "#0088FE" },
+    { label: t("dashboard.hdd.used"), value: hdd?.used || 0, color: "#00C49F" },
+    { label: t("dashboard.hdd.reserved"), value: hdd?.reserved || 0, color: "#FFBB28" },
   ];
 
   const memoryData = [
-    { label: "Used", value: apiResponse?.memory?.used || 0, color: "#00C49F" },
-    { label: "Free", value: apiResponse?.memory?.free || 0, color: "#0088FE" },
+    { label: t("dashboard.memory.used"), value: apiResponse?.memory?.used || 0, color: "#00C49F" },
+    { label: t("dashboard.memory.free"), value: apiResponse?.memory?.free || 0, color: "#0088FE" },
     {
-      label: "Buff/Cache",
+      label: t("dashboard.memory.buffCache"),
       value: apiResponse?.memory?.buffCache || 0,
       color: "#FFBB28",
     },
@@ -104,7 +106,7 @@ const Dashboard: FC = () => {
         gutterBottom
         sx={{ mt: 4, mb: 3 }}
       >
-        Server Dashboard
+        {t("dashboard.title")}
       </Typography>
       <Button
         onClick={handleRefresh}
@@ -117,11 +119,11 @@ const Dashboard: FC = () => {
         aria-label="refresh"
         sx={{ borderRadius: 2, minWidth: 48, minHeight: 48, px: 2, mb: 3 }}
       >
-        Odśwież
+        {t("dashboard.refresh")}
       </Button>
       {lastFetch && (
         <Typography variant="body2" color="text.secondary" mb={2}>
-          Ostatnie pobranie danych: {lastFetch.toLocaleString()}
+          {t("dashboard.lastUpdate", { value: lastFetch.toLocaleString() })}
         </Typography>
       )}
       {error && (
@@ -149,7 +151,7 @@ const Dashboard: FC = () => {
                 primary={apiResponse.server_id}
                 secondary={
                   <Typography variant="body2" color="primary">
-                    Uptime: {apiResponse.uptime}
+                    {t("dashboard.info.uptime", { value: apiResponse.uptime })}
                   </Typography>
                 }
               />
@@ -160,7 +162,7 @@ const Dashboard: FC = () => {
                 <Storage color="primary" />
               </ListItemIcon>
               <ListItemText
-                primary="HDD Space"
+                primary={t("dashboard.info.hdd")}
                 secondary={
                   <>
                     <Typography variant="body2" color="primary">
@@ -186,7 +188,7 @@ const Dashboard: FC = () => {
                 <Memory color="primary" />
               </ListItemIcon>
               <ListItemText
-                primary="RAM Usage"
+                primary={t("dashboard.info.ram")}
                 secondary={
                   <>
                     <Typography variant="body2" color="primary">
@@ -213,7 +215,7 @@ const Dashboard: FC = () => {
             component="h2"
             sx={{ mt: 4, mb: 2, color: "text.secondary", fontWeight: 400 }}
           >
-            HDD Usage Distribution
+            {t("dashboard.hdd.chartTitle")}
           </Typography>
           <PieChart
             series={[
@@ -231,7 +233,7 @@ const Dashboard: FC = () => {
             component="h2"
             sx={{ mt: 3, mb: 2, color: "text.secondary", fontWeight: 400 }}
           >
-            Memory Usage Distribution
+            {t("dashboard.memory.chartTitle")}
           </Typography>
           <PieChart
             series={[
