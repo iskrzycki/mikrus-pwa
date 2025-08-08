@@ -21,6 +21,11 @@
       "buffCache": "Buff/Cache"
     }
   },
+  "logs": {
+    "title": "Logs",
+    "lastUpdate": "Last update {{value}}",
+    "refresh": "Refresh"
+  },
   "navbar": {
     "dashboard": "Dashboard",
     "settings": "Settings",

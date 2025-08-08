@@ -71,7 +71,7 @@ const Logs: FC = () => {
         gutterBottom
         sx={{ mt: 4, mb: 3 }}
       >
-        {t("dashboard.title")}
+        {t("logs.title")}
       </Typography>
       <Button
         onClick={handleRefresh}
@@ -84,11 +84,11 @@ const Logs: FC = () => {
         aria-label="refresh"
         sx={{ borderRadius: 2, minWidth: 48, minHeight: 48, px: 2, mb: 3 }}
       >
-        {t("dashboard.refresh")}
+        {t("logs.refresh")}
       </Button>
       {lastFetch && (
         <Typography variant="body2" color="text.secondary" mb={2}>
-          {t("dashboard.lastUpdate", { value: lastFetch.toLocaleString() })}
+          {t("logs.lastUpdate", { value: lastFetch.toLocaleString() })}
         </Typography>
       )}
       {error && (
