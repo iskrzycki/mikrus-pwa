@@ -46,7 +46,7 @@ const Settings: FC = () => {
       elevation={3}
       sx={{
         width: "90vw",
-        height: "calc(100vh - 120px)",
+        height: "calc(100% - 120px)",
         mt: 3,
         p: 2,
         display: "flex",

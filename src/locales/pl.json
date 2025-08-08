@@ -26,6 +26,11 @@
     "lastUpdate": "Ostatnia aktualizacja {{value}}",
     "refresh": "Odśwież"
   },
+  "databases": {
+    "title": "Bazy danych",
+    "lastUpdate": "Ostatnia aktualizacja {{value}}",
+    "refresh": "Odśwież"
+  },
   "navbar": {
     "dashboard": "Panel",
     "settings": "Ustawienia",

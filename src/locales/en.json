@@ -26,6 +26,11 @@
     "lastUpdate": "Last update {{value}}",
     "refresh": "Refresh"
   },
+  "databases": {
+    "title": "Databases",
+    "lastUpdate": "Last update {{value}}",
+    "refresh": "Refresh"
+  },
   "navbar": {
     "dashboard": "Dashboard",
     "settings": "Settings",

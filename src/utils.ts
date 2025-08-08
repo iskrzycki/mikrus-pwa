@@ -100,10 +100,19 @@ export interface LogData {
   when_done: string;
 }
 
+export interface DatabaseInfo {
+  [key: string]: string;
+}
+
 export const getLogs = async (
   apiKey: string,
   serverId: string
 ): Promise<LogData[]> => await fetchMikrusAPI(apiKey, serverId, "logs");
+
+export const getDatabases = async (
+  apiKey: string,
+  serverId: string
+): Promise<DatabaseInfo> => await fetchMikrusAPI(apiKey, serverId, "db");
 
 export const extractSystemInfo = (inputString: string): { systemTime: string, uptime: string } => {
   // Regular expression to match the system time in the format HH:MM:SS
