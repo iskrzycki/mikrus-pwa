@@ -49,7 +49,6 @@ export const fetchMikrusAPI = async (
   console.log(
     `fetching https://api.mikr.us/${endpoint}`
   );
-  console.log("formData", formData);
 
   const apiUrl = import.meta.env.DEV
     ? "/api"
@@ -104,10 +103,26 @@ export interface DatabaseInfo {
   [key: string]: string;
 }
 
+export interface GenericApiResponse {
+  msg?: string;
+  task_id?: number;
+  error?: string;
+}
+
 export const getLogs = async (
   apiKey: string,
   serverId: string
 ): Promise<LogData[]> => await fetchMikrusAPI(apiKey, serverId, "logs");
+
+export const restartServer = async (
+  apiKey: string,
+  serverId: string
+): Promise<GenericApiResponse> => await fetchMikrusAPI(apiKey, serverId, "restart");
+
+export const boostServer = async (
+  apiKey: string,
+  serverId: string
+): Promise<GenericApiResponse> => await fetchMikrusAPI(apiKey, serverId, "amfetamina");
 
 export const getDatabases = async (
   apiKey: string,

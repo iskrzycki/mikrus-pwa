@@ -18,6 +18,7 @@ import {
 import { Refresh as RefreshIcon, Storage as DatabaseIcon, ExpandMore as ExpandMoreIcon } from "@mui/icons-material";
 import { getDatabases } from "../utils";
 import { useDatabasesStore } from "../store/databasesStore";
+import styles from "./databases.module.css";
 
 const Databases: FC = () => {
   const { t } = useTranslation();
@@ -101,20 +102,10 @@ const Databases: FC = () => {
         </Typography>
       )}
       {apiResponse && !loading && !error && (
-        <List
-          sx={{
-            bgcolor: "#e3f2fd",
-            borderRadius: 3,
-            boxShadow: 4,
-            border: "1.5px solid #90caf9",
-            p: 0,
-            mt: 2,
-            width: "100%",
-          }}
-        >
+        <List className={styles.dbList}>
           {Object.entries(apiResponse).map(([key, value]) => (
-            <div key={key}>
-              <Accordion sx={{ boxShadow: 'none', bgcolor: 'transparent' }}>
+            <>
+              <Accordion sx={{ boxShadow: 'none', bgcolor: 'transparent' }} key={key}>
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls={`panel-${key}-content`}
@@ -131,8 +122,8 @@ const Databases: FC = () => {
                 </AccordionSummary>
                 <AccordionDetails>
                   <Typography
-                    sx={{ 
-                      p: 2, 
+                    sx={{
+                      p: 2,
                       bgcolor: 'rgba(144, 202, 249, 0.15)',
                       borderRadius: 1,
                       whiteSpace: 'pre-line'
@@ -143,7 +134,7 @@ const Databases: FC = () => {
                 </AccordionDetails>
               </Accordion>
               <Divider />
-            </div>
+            </>
           ))}
         </List>
       )}

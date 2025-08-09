@@ -31,6 +31,9 @@
     "lastUpdate": "Last update {{value}}",
     "refresh": "Refresh"
   },
+  "cmd": {
+    "title": "CMD & Actions"
+  },
   "navbar": {
     "dashboard": "Dashboard",
     "settings": "Settings",

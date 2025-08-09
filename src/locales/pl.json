@@ -31,6 +31,9 @@
     "lastUpdate": "Ostatnia aktualizacja {{value}}",
     "refresh": "Odśwież"
   },
+  "cmd": {
+    "title": "CMD & akcje"
+  },
   "navbar": {
     "dashboard": "Panel",
     "settings": "Ustawienia",

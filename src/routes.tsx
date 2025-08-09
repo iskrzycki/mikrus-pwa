@@ -1,6 +1,5 @@
 import Settings from "./pages/Settings";
 import Dashboard from "./pages/Dashboard";
-import NotImplemented from "./pages/NotImplemented";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import SettingsIcon from "@mui/icons-material/Settings";
 import TerminalIcon from "@mui/icons-material/Terminal";
@@ -8,6 +7,7 @@ import StorageIcon from "@mui/icons-material/Storage";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import Logs from "./pages/Logs";
 import Databases from "./pages/Databases";
+import CMD from "./pages/cmd";
 
 export type RouteConfig = {
   path: string;
@@ -53,7 +53,7 @@ export const routes: RouteConfig[] = [
   },
   {
     path: "cmd",
-    element: <NotImplemented label={"navbar.cmd"} />,
+    element: <CMD />,
     labelKey: "navbar.cmd",
     icon: <TerminalIcon fontSize="large" />,
     nav: true,
