@@ -1,39 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <!-- Google Tag Manager -->
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-P9SBPW1Q9B"
+    ></script>
     <script>
-      (function (w, d, s, l, i) {
-        w[l] = w[l] || [];
-        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
-        var f = d.getElementsByTagName(s)[0],
-          j = d.createElement(s),
-          dl = l != "dataLayer" ? "&l=" + l : "";
-        j.async = true;
-        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
-        f.parentNode.insertBefore(j, f);
-      })(window, document, "script", "dataLayer", "GTM-P4RK33R5");
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "G-P9SBPW1Q9B");
     </script>
-    <!-- End Google Tag Manager -->
     <meta charset="UTF-8" />
     <link rel="icon" href="assets/icon-512.png" sizes="any" />
     <link rel="apple-touch-icon" href="assets/icon-180.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mikr.us PWA app</title>
-    <script type="module" crossorigin src="/mikrus-pwa/assets/index-CaMONsKf.js"></script>
+    <script type="module" crossorigin src="/mikrus-pwa/assets/index-WMF9yG7Y.js"></script>
     <link rel="stylesheet" crossorigin href="/mikrus-pwa/assets/index-Dfc3aRqN.css">
   <link rel="manifest" href="/mikrus-pwa/manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="/mikrus-pwa/registerSW.js"></script></head>
   <body>
-    <!-- Google Tag Manager (noscript) -->
-    <noscript
-      ><iframe
-        src="https://www.googletagmanager.com/ns.html?id=GTM-P4RK33R5"
-        height="0"
-        width="0"
-        style="display: none; visibility: hidden"
-      ></iframe
-    ></noscript>
-    <!-- End Google Tag Manager (noscript) -->
     <div id="root"></div>
   </body>
 </html>
