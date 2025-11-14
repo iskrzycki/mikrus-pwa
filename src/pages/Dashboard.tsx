@@ -21,7 +21,7 @@ import {
   DnsOutlined,
   Refresh as RefreshIcon,
 } from "@mui/icons-material";
-import { getServerInfo } from "../utils";
+import { getServerInfo, getApiErrorMessage } from "../utils";
 
 const Dashboard: FC = () => {
   const { t } = useTranslation();
@@ -80,7 +80,7 @@ const Dashboard: FC = () => {
       setApiResponse(response);
       setLastFetch(new Date());
     } catch (err) {
-      setError("Error: " + (err as Error).message);
+      setError(getApiErrorMessage(err));
     } finally {
       setLoading(false);
     }

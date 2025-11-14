@@ -32,7 +32,22 @@
     "refresh": "Refresh"
   },
   "cmd": {
-    "title": "CMD & Actions"
+    "title": "CMD & Actions",
+    "actions": {
+      "title": "Server Actions",
+      "restart": "Restart Server",
+      "boost": "Boost Server"
+    },
+    "cmd": {
+      "placeholder": "Enter your command here",
+      "execute": "Execute Command",
+      "response": "Response:",
+      "pleaseEnterCommand": "Please enter a command.",
+      "noOutput": "Command executed. No output returned."
+    },
+    "errors": {
+      "apiOrServerIdMissing": "API key or Server ID not set."
+    }
   },
   "navbar": {
     "dashboard": "Dashboard",

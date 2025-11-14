@@ -16,7 +16,7 @@ import {
 } from "@mui/material";
 
 import { Refresh as RefreshIcon, Storage as DatabaseIcon, ExpandMore as ExpandMoreIcon } from "@mui/icons-material";
-import { getDatabases } from "../utils";
+import { getDatabases, getApiErrorMessage } from "../utils";
 import { useDatabasesStore } from "../store/databasesStore";
 import styles from "./databases.module.css";
 
@@ -50,7 +50,7 @@ const Databases: FC = () => {
       setApiResponse(response);
       setLastFetch(new Date());
     } catch (err) {
-      setError("Error: " + (err as Error).message);
+      setError(getApiErrorMessage(err));
     } finally {
       setLoading(false);
     }

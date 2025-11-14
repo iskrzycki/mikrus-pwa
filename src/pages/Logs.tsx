@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 
 import { Refresh as RefreshIcon } from "@mui/icons-material";
-import { getLogs } from "../utils";
+import { getLogs, getApiErrorMessage } from "../utils";
 import { useLogsStore } from "../store/logsStore";
 
 const Logs: FC = () => {
@@ -45,7 +45,7 @@ const Logs: FC = () => {
       setApiResponse(response);
       setLastFetch(new Date());
     } catch (err) {
-      setError("Error: " + (err as Error).message);
+      setError(getApiErrorMessage(err));
     } finally {
       setLoading(false);
     }

@@ -32,7 +32,22 @@
     "refresh": "Odśwież"
   },
   "cmd": {
-    "title": "CMD & akcje"
+    "title": "CMD & akcje",
+    "actions": {
+      "title": "Akcje serwera",
+      "restart": "Restartuj serwer",
+      "boost": "Przyspiesz serwer"
+    },
+    "cmd": {
+      "placeholder": "Wpisz tutaj swoją komendę",
+      "execute": "Wykonaj komendę",
+      "response": "Odpowiedź:",
+      "pleaseEnterCommand": "Wprowadź komendę.",
+      "noOutput": "Komenda wykonana. Brak zwróconego wyniku."
+    },
+    "errors": {
+      "apiOrServerIdMissing": "Klucz API lub ID serwera nie zostały ustawione."
+    }
   },
   "navbar": {
     "dashboard": "Panel",

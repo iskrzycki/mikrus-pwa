@@ -21,9 +21,10 @@ import {
   Storage as DatabaseIcon,
   Refresh,
   ExpandMore as ExpandMoreIcon,
+  RocketLaunch as BoostIcon,
 } from "@mui/icons-material";
 import styles from "./cmd.module.css";
-import { boostServer, restartServer } from "../utils";
+import { boostServer, execCmd, restartServer, getApiErrorMessage } from "../utils";
 
 const CMD: FC = () => {
   const { t } = useTranslation();
@@ -31,6 +32,37 @@ const CMD: FC = () => {
   const [apiResponse, setApiResponse] = useState<string | undefined>(undefined);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [cmdInput, setCmdInput] = useState("");
+  const [cmdResponse, setCmdResponse] = useState("");
+
+  const handleSendCmd = async () => {
+    setLoading(true);
+    setError(null);
+    setCmdResponse("");
+
+    const apiKey = localStorage.getItem("apiKey");
+    const serverId = localStorage.getItem("serverId");
+
+    if (!cmdInput.trim()) {
+      setCmdResponse(t("cmd.cmd.pleaseEnterCommand"));
+      setLoading(false);
+      return;
+    }
+    if (!apiKey || !serverId) {
+      setError(t("cmd.errors.apiOrServerIdMissing"));
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const response = await execCmd(apiKey, serverId, cmdInput);
+      setCmdResponse(response.output || t("cmd.cmd.noOutput"));
+    } catch (err) {
+      setCmdResponse(getApiErrorMessage(err));
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleButtonAction = async (type: "restart" | "boost") => {
     setOpen(false);
@@ -42,7 +74,7 @@ const CMD: FC = () => {
     const serverId = localStorage.getItem("serverId");
 
     if (!apiKey || !serverId) {
-      setError("API key or Server ID not set.");
+      setError(t("cmd.errors.apiOrServerIdMissing"));
       setLoading(false);
       return;
     }
@@ -62,7 +94,7 @@ const CMD: FC = () => {
         setOpen(true);
       }
     } catch (err) {
-      setError("Error: " + (err as Error).message);
+      setError(getApiErrorMessage(err));
       setOpen(true);
     } finally {
       setLoading(false);
@@ -80,19 +112,7 @@ const CMD: FC = () => {
   };
 
   return (
-    <Paper
-      elevation={3}
-      sx={{
-        width: "90vw",
-        height: "calc(100% - 120px)",
-        mt: 3,
-        p: 2,
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "start",
-        alignItems: "center",
-      }}
-    >
+    <Paper elevation={3} className={styles.cmdContainer}>
       <Typography
         variant="h4"
         component="h1"
@@ -112,7 +132,7 @@ const CMD: FC = () => {
               <ListItemIcon>
                 <DatabaseIcon color="primary" />
               </ListItemIcon>
-              <ListItemText primary="Server Actions" />
+              <ListItemText primary={t("cmd.actions.title")} />
             </ListItem>
           </AccordionSummary>
           <AccordionDetails>
@@ -123,22 +143,49 @@ const CMD: FC = () => {
               startIcon={<Refresh />}
               onClick={() => handleButtonAction("restart")}
               loading={loading}
+              sx={{ marginRight: 4 }}
             >
-              Restart
+              {t("cmd.actions.restart")}
             </Button>
             <Button
               variant="outlined"
               color="primary"
               size="small"
-              startIcon={<Refresh />}
+              startIcon={<BoostIcon />}
               onClick={() => handleButtonAction("boost")}
               loading={loading}
             >
-              Amfetamina
+               {t("cmd.actions.boost")}
             </Button>
           </AccordionDetails>
         </Accordion>
       </List>
+      <textarea
+        value={cmdInput}
+        onChange={(e) => setCmdInput(e.target.value)}
+        placeholder={t("cmd.cmd.placeholder")}
+        rows={4}
+        className={styles.cmdTextarea}
+      />
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={handleSendCmd}
+        sx={{ mb: 2 }}
+        loading={loading}
+      >
+        {t("cmd.cmd.execute")}
+      </Button>
+      {!!cmdResponse && (
+        <>
+          <Typography variant="subtitle2" sx={{ mt: 2, mb: 1 }}>
+            {t("cmd.cmd.response")}
+          </Typography>
+          <Paper variant="outlined" className={styles.cmdResponsePaper}>
+            {cmdResponse}
+          </Paper>
+        </>
+      )}
       {!!error || !!apiResponse ? (
         <Snackbar
           open={open && (!!error || !!apiResponse)}

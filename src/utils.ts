@@ -1,3 +1,5 @@
+import * as Sentry from "@sentry/react";
+
 export interface DiskStats {
   size: number;
   usePercent: string;
@@ -8,7 +10,15 @@ export interface DiskStats {
   reserved: number;
 }
 
-import * as Sentry from "@sentry/react";
+export class ApiError extends Error {
+  public statusCode: number;
+  
+  constructor(message: string, statusCode: number) {
+    super(message);
+    this.name = 'ApiError';
+    this.statusCode = statusCode;
+  }
+}
 
 interface MemoryStats {
   total: number;
@@ -41,11 +51,17 @@ export type ServerData = {
 export const fetchMikrusAPI = async (
   apiKey: string,
   serverId: string,
-  endpoint: string
+  endpoint: string,
+  data?: Record<string, string>
 ) => {
   const formData = new FormData();
   formData.append("key", apiKey);
   formData.append("srv", serverId);
+  if (data) {
+    Object.entries(data).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+  }
   console.log(
     `fetching https://api.mikr.us/${endpoint}`
   );
@@ -62,11 +78,15 @@ export const fetchMikrusAPI = async (
   console.log("response status", response.status);
 
   if (response.status === 429) {
-    const error = new Error("Too Many Requests");
+    const error = new ApiError("Too Many Requests", 429);
     Sentry.captureException(error);
     throw error;
   } else if (response.status === 400) {
-    const error = new Error("Bad request");
+    const error = new ApiError("Bad request", 400);
+    Sentry.captureException(error);
+    throw error;
+  } else if (!response.ok) {
+    const error = new ApiError(`HTTP Error ${response.status}`, response.status);
     Sentry.captureException(error);
     throw error;
   }
@@ -109,6 +129,10 @@ export interface GenericApiResponse {
   error?: string;
 }
 
+export interface CMDApiResponse {
+  output: string;
+}
+
 export const getLogs = async (
   apiKey: string,
   serverId: string
@@ -128,6 +152,12 @@ export const getDatabases = async (
   apiKey: string,
   serverId: string
 ): Promise<DatabaseInfo> => await fetchMikrusAPI(apiKey, serverId, "db");
+
+export const execCmd = async (
+  apiKey: string,
+  serverId: string,
+  command: string
+): Promise<CMDApiResponse> => await fetchMikrusAPI(apiKey, serverId, "exec", { cmd: command });
 
 export const extractSystemInfo = (inputString: string): { systemTime: string, uptime: string } => {
   // Regular expression to match the system time in the format HH:MM:SS
@@ -223,5 +253,27 @@ export const parseSizeString = (sizeString: string): number => {
     return size / 1000;
   } else {
     return size;
+  }
+};
+
+export const getApiErrorMessage = (err: unknown): string => {
+  if (err instanceof ApiError) {
+    switch (err.statusCode) {
+      case 429:
+        return "Rate limit exceeded. Please wait before trying again.";
+      case 400:
+        return "Invalid request. Please check your input and try again.";
+      case 401:
+        return "Authentication failed. Please check your API key.";
+      case 403:
+        return "Access forbidden. You don't have permission for this action.";
+      case 500:
+        return "Server error. Please try again later.";
+      default:
+        return `HTTP Error ${err.statusCode}: ${err.message}`;
+    }
+  } else {
+    const error = err as Error;
+    return "Error: " + error.message;
   }
 };
