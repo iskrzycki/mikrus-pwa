@@ -11,13 +11,14 @@ Sentry.init({
   integrations: [Sentry.browserTracingIntegration()],
   tracesSampleRate: 1.0,
 });
-
+// @ts-expect-error
 let installPrompt = null;
 const installButton = document.querySelector("#install");
 
 window.addEventListener("beforeinstallprompt", (event) => {
   event.preventDefault();
   installPrompt = event;
+  // @ts-expect-error
   installButton.removeAttribute("hidden");
 });
 
