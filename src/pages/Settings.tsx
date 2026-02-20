@@ -107,6 +107,9 @@ const Settings: FC = () => {
       <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
         {t("settings.version", { value: packageJson.version })}
       </Typography>
+      <a href="https://buycoffee.to/iskrzycki" target="_blank" rel="noopener noreferrer">
+        <img src="https://buycoffee.to/static/img/share/share-button-primary.png" style={{ width: 195, height: 51 }} alt="Buy me a coffee on buycoffee.to" />
+      </a>
     </Paper>
   );
 };
