@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 
 import Navbar from "./Navbar";
+import ServerSwitcher from "./ServerSwitcher";
+import { useServerStore } from "./store/serverStore";
 import "./App.css";
 import { routes } from "./routes";
 
@@ -41,21 +43,27 @@ const dashboardTheme = createTheme({
   },
 });
 
-const App = () => (
-  <ThemeProvider theme={dashboardTheme}>
-    <Router basename="/mikrus-pwa/">
-      <div className="app-container">
-        <div className="main-content">
-          <Routes>
-            {routes.map(({ path, element }) => (
-              <Route key={path} path={path} element={element} />
-            ))}
-          </Routes>
+const App = () => {
+  const { servers } = useServerStore();
+  const hasMultipleServers = servers.length > 1;
+
+  return (
+    <ThemeProvider theme={dashboardTheme}>
+      <Router basename="/mikrus-pwa/">
+        <ServerSwitcher />
+        <div className="app-container" style={{ paddingTop: hasMultipleServers ? 48 : 0 }}>
+          <div className="main-content">
+            <Routes>
+              {routes.map(({ path, element }) => (
+                <Route key={path} path={path} element={element} />
+              ))}
+            </Routes>
+          </div>
+          <Navbar routes={routes} />
         </div>
-        <Navbar routes={routes} />
-      </div>
-    </Router>
-  </ThemeProvider>
-);
+      </Router>
+    </ThemeProvider>
+  );
+};
 
 export default App;

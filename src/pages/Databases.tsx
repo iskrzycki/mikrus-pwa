@@ -18,6 +18,7 @@ import {
 import { Refresh as RefreshIcon, Storage as DatabaseIcon, ExpandMore as ExpandMoreIcon } from "@mui/icons-material";
 import { getDatabases, getApiErrorMessage } from "../utils";
 import { useDatabasesStore } from "../store/databasesStore";
+import { useServerStore } from "../store/serverStore";
 import styles from "./databases.module.css";
 
 const Databases: FC = () => {
@@ -26,6 +27,7 @@ const Databases: FC = () => {
   const setApiResponse = useDatabasesStore((state) => state.setApiResponse);
   const lastFetch = useDatabasesStore((state) => state.lastFetch);
   const setLastFetch = useDatabasesStore((state) => state.setLastFetch);
+  const activeServer = useServerStore((state) => state.getActiveServer());
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -36,17 +38,15 @@ const Databases: FC = () => {
     setError(null);
     setApiResponse(undefined);
     setLastFetch(null);
-    const apiKey = localStorage.getItem("apiKey");
-    const serverId = localStorage.getItem("serverId");
 
-    if (!apiKey || !serverId) {
+    if (!activeServer) {
       setError("API key or Server ID not set.");
       setLoading(false);
       return;
     }
 
     try {
-      const response = await getDatabases(apiKey, serverId);
+      const response = await getDatabases(activeServer.apiKey, activeServer.serverId);
       setApiResponse(response);
       setLastFetch(new Date());
     } catch (err) {

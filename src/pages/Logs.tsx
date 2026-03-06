@@ -14,6 +14,7 @@ import {
 import { Refresh as RefreshIcon } from "@mui/icons-material";
 import { getLogs, getApiErrorMessage } from "../utils";
 import { useLogsStore } from "../store/logsStore";
+import { useServerStore } from "../store/serverStore";
 
 const Logs: FC = () => {
   const { t } = useTranslation();
@@ -21,6 +22,7 @@ const Logs: FC = () => {
   const setApiResponse = useLogsStore((state) => state.setApiResponse);
   const lastFetch = useLogsStore((state) => state.lastFetch);
   const setLastFetch = useLogsStore((state) => state.setLastFetch);
+  const activeServer = useServerStore((state) => state.getActiveServer());
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -31,17 +33,15 @@ const Logs: FC = () => {
     setError(null);
     setApiResponse(undefined);
     setLastFetch(null);
-    const apiKey = localStorage.getItem("apiKey");
-    const serverId = localStorage.getItem("serverId");
 
-    if (!apiKey || !serverId) {
+    if (!activeServer) {
       setError("API key or Server ID not set.");
       setLoading(false);
       return;
     }
 
     try {
-      const response = await getLogs(apiKey, serverId);
+      const response = await getLogs(activeServer.apiKey, activeServer.serverId);
       setApiResponse(response);
       setLastFetch(new Date());
     } catch (err) {

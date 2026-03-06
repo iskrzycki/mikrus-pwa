@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { FC } from "react";
 import { PieChart } from "@mui/x-charts/PieChart";
 import { useDashboardStore } from "../store/dashboardStore";
+import { useServerStore } from "../store/serverStore";
 import { useTranslation } from "react-i18next";
 import {
   Typography,
@@ -29,6 +30,7 @@ const Dashboard: FC = () => {
   const setApiResponse = useDashboardStore((state) => state.setApiResponse);
   const lastFetch = useDashboardStore((state) => state.lastFetch);
   const setLastFetch = useDashboardStore((state) => state.setLastFetch);
+  const activeServer = useServerStore((state) => state.getActiveServer());
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -66,17 +68,15 @@ const Dashboard: FC = () => {
     setError(null);
     setApiResponse(undefined);
     setLastFetch(null);
-    const apiKey = localStorage.getItem("apiKey");
-    const serverId = localStorage.getItem("serverId");
 
-    if (!apiKey || !serverId) {
+    if (!activeServer) {
       setError("API key or Server ID not set.");
       setLoading(false);
       return;
     }
 
     try {
-      const response = await getServerInfo(apiKey, serverId);
+      const response = await getServerInfo(activeServer.apiKey, activeServer.serverId);
       setApiResponse(response);
       setLastFetch(new Date());
     } catch (err) {

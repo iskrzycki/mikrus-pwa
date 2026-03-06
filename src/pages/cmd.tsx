@@ -25,9 +25,11 @@ import {
 } from "@mui/icons-material";
 import styles from "./cmd.module.css";
 import { boostServer, execCmd, restartServer, getApiErrorMessage } from "../utils";
+import { useServerStore } from "../store/serverStore";
 
 const CMD: FC = () => {
   const { t } = useTranslation();
+  const activeServer = useServerStore((state) => state.getActiveServer());
   const [open, setOpen] = useState(false);
   const [apiResponse, setApiResponse] = useState<string | undefined>(undefined);
   const [loading, setLoading] = useState(false);
@@ -40,22 +42,19 @@ const CMD: FC = () => {
     setError(null);
     setCmdResponse("");
 
-    const apiKey = localStorage.getItem("apiKey");
-    const serverId = localStorage.getItem("serverId");
-
     if (!cmdInput.trim()) {
       setCmdResponse(t("cmd.cmd.pleaseEnterCommand"));
       setLoading(false);
       return;
     }
-    if (!apiKey || !serverId) {
+    if (!activeServer) {
       setError(t("cmd.errors.apiOrServerIdMissing"));
       setLoading(false);
       return;
     }
 
     try {
-      const response = await execCmd(apiKey, serverId, cmdInput);
+      const response = await execCmd(activeServer.apiKey, activeServer.serverId, cmdInput);
       setCmdResponse(response.output || t("cmd.cmd.noOutput"));
     } catch (err) {
       setCmdResponse(getApiErrorMessage(err));
@@ -70,10 +69,7 @@ const CMD: FC = () => {
     setError(null);
     setApiResponse(undefined);
 
-    const apiKey = localStorage.getItem("apiKey");
-    const serverId = localStorage.getItem("serverId");
-
-    if (!apiKey || !serverId) {
+    if (!activeServer) {
       setError(t("cmd.errors.apiOrServerIdMissing"));
       setLoading(false);
       return;
@@ -82,9 +78,9 @@ const CMD: FC = () => {
     try {
       let response;
       if (type === "restart") {
-        response = await restartServer(apiKey, serverId);
+        response = await restartServer(activeServer.apiKey, activeServer.serverId);
       } else if (type === "boost") {
-        response = await boostServer(apiKey, serverId);
+        response = await boostServer(activeServer.apiKey, activeServer.serverId);
       }
       if (response && response.error) {
         setError(response.error);

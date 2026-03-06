@@ -58,7 +58,7 @@
   },
   "settings": {
     "title": "Ustawienia",
-    "save": "Zapisz zmiany",
+    "save": "Zapisz",
     "apiLabel": "Klucz API",
     "serverIdLabel": "ID serwera",
     "apiPlaceholder": "Wprowadź swój klucz API",
@@ -68,6 +68,14 @@
     "languages": {
       "en": "Angielski",
       "pl": "Polski"
+    },
+    "servers": {
+      "title": "Serwery",
+      "add": "Dodaj serwer",
+      "addTitle": "Dodaj nowy serwer",
+      "editTitle": "Edytuj serwer",
+      "empty": "Brak skonfigurowanych serwerów. Dodaj serwer, aby rozpocząć.",
+      "cancel": "Anuluj"
     }
   }
 }
